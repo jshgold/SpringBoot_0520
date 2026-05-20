@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @Entity
 public class PostComment extends BaseEntity {
     private String content;
-    @ManyToOne
-    @JsonIgnore
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
     public PostComment(Post post, String content) {
@@ -24,5 +24,4 @@ public class PostComment extends BaseEntity {
     public void modify(String content) {
         this.content = content;
     }
-
 }

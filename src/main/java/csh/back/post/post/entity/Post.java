@@ -12,7 +12,6 @@ import java.util.Optional;
 
 import static jakarta.persistence.CascadeType.PERSIST;
 import static jakarta.persistence.CascadeType.REMOVE;
-import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -21,7 +20,7 @@ public class Post extends BaseEntity {
     private String title;
     private String content;
 
-    @OneToMany(mappedBy = "post", fetch = LAZY, cascade = {PERSIST, REMOVE}, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = {PERSIST, REMOVE}, orphanRemoval = true)
     private List<PostComment> comments = new ArrayList<>();
 
     public Post(String title, String content) {
@@ -52,9 +51,5 @@ public class Post extends BaseEntity {
         if (postComment == null) return false;
 
         return comments.remove(postComment);
-    }
-
-    public List<PostComment> getComments() {
-        return comments;
     }
 }
