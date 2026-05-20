@@ -11,18 +11,18 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 public class PostComment extends BaseEntity {
-    private String body;
+    private String content;
     @ManyToOne
     @JsonIgnore
     private Post post;
 
-    public PostComment(Post post, String body) {
+    public PostComment(Post post, String content) {
         this.post = post;
-        this.body = body;
+        this.content = content;
     }
 
-    public void modify(String comment) {
-        this.body = comment;
+    public void modify(String content) {
+        this.content = content;
     }
 
 }

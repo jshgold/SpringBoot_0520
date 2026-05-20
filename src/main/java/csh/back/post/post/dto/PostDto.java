@@ -1,0 +1,23 @@
+package csh.back.post.post.dto;
+
+import csh.back.post.post.entity.Post;
+import lombok.Getter;
+
+import java.time.LocalDateTime;
+
+@Getter
+public class PostDto {
+    private int id;
+    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
+    private String subject;
+    private String body;
+
+    public PostDto(Post post) {
+        this.id = post.getId();
+        this.createdDate = post.getCreateDate();
+        this.modifiedDate = post.getModifyDate();
+        this.subject = post.getTitle();
+        this.body = post.getContent();
+    }
+}
