@@ -53,4 +53,8 @@ public class Post extends BaseEntity {
 
         return comments.remove(postComment);
     }
+
+    public List<PostComment> getComments() {
+        return comments;
+    }
 }
