@@ -1,5 +1,6 @@
 package csh.back.post.post.controller;
 
+import csh.back.global.rsData.RsData;
 import csh.back.post.post.dto.PostDto;
 import csh.back.post.post.entity.Post;
 import csh.back.post.post.service.PostService;
@@ -29,11 +30,13 @@ public class ApiV1PostController {
 
     @Transactional
     @GetMapping("/{id}/delete")
-    public PostDto delete(@PathVariable int id) {
+    public RsData<PostDto> delete(@PathVariable int id) {
         Post post = postService.findById(id).get();
 
         postService.delete(post);
 
-        return new PostDto(post);
+
+        return new RsData<>("200-1",
+                "%d번 글이 삭제되었습니다.".formatted(post.getId()),new PostDto(post));
     }
 }
