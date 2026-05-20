@@ -3,7 +3,6 @@ package csh.back.post.post.entity;
 import csh.back.global.jpa.entity.BaseEntity;
 import csh.back.post.postComment.entity.PostComment;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
