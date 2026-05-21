@@ -10,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/posts")
@@ -50,12 +53,15 @@ public class ApiV1PostController {
 
     @Transactional
     @PostMapping("/create")
-    public RsData<PostDto> create(@Valid @RequestBody writeForm form) {
-        System.out.println(form.toString());
-        Post p = postService.write(form.title(), form.content());
+    public RsData<PostWriteResBody> create(@Valid @RequestBody PostWriteReqBody req) {
+        System.out.println(req.toString());
+        Post p = postService.write(req.title(), req.content());
+        long totalCnt = postService.count();
         PostDto dto = new PostDto(p);
-        return new RsData<>("200-1", "성공했어요~~!", dto);
+        PostWriteResBody resBody = new PostWriteResBody(dto, totalCnt);
+        return new RsData<>("207-1", "성공했어요~~!", resBody);
     }
 
-    record writeForm(@NotBlank String title, @NotBlank String content){}
+    record PostWriteReqBody(@NotBlank String title, @NotBlank String content){}
+    record PostWriteResBody(@NotBlank PostDto postDto, @NotBlank long totalCnt){}
 }
