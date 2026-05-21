@@ -59,7 +59,7 @@ public class ApiV1PostController {
         long totalCnt = postService.count();
         PostDto dto = new PostDto(p);
         PostWriteResBody resBody = new PostWriteResBody(dto, totalCnt);
-        return new RsData<>("207-1", "성공했어요~~!", resBody);
+        return new RsData<>("201-1", "성공했어요~~!", resBody);
     }
 
     record PostWriteReqBody(@NotBlank String title, @NotBlank String content){}
