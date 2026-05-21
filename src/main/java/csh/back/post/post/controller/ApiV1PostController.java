@@ -54,12 +54,20 @@ public class ApiV1PostController {
     @Transactional
     @PostMapping("/create")
     public RsData<PostWriteResBody> create(@Valid @RequestBody PostWriteReqBody req) {
-        System.out.println(req.toString());
         Post p = postService.write(req.title(), req.content());
         long totalCnt = postService.count();
         PostDto dto = new PostDto(p);
         PostWriteResBody resBody = new PostWriteResBody(dto, totalCnt);
         return new RsData<>("201-1", "성공했어요~~!", resBody);
+    }
+
+    @Transactional
+    @PutMapping("/edit/{id}")
+    public RsData<PostDto> edit(@PathVariable int id, @Valid @RequestBody PostWriteReqBody req) {
+        Post p = postService.findById(id).get();
+        postService.modify(p, req.title(), req.content());
+        PostDto dto = new PostDto(p);
+        return new RsData<>("201-1", "성공했어요~~!", dto);
     }
 
     record PostWriteReqBody(@NotBlank String title, @NotBlank String content){}
