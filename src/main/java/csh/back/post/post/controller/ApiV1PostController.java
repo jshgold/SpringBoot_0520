@@ -53,12 +53,12 @@ public class ApiV1PostController {
 
     @Transactional
     @PostMapping("/create")
-    public RsData<PostWriteResBody> create(@Valid @RequestBody PostWriteReqBody req) {
+    public RsData<PostWriteResBody> write(@Valid @RequestBody PostWriteReqBody req) {
         Post p = postService.write(req.title(), req.content());
         long totalCnt = postService.count();
         PostDto dto = new PostDto(p);
         PostWriteResBody resBody = new PostWriteResBody(dto, totalCnt);
-        return new RsData<>("201-1", "성공했어요~~!", resBody);
+        return new RsData<>("201-1", "%d번 글이 작성되었습니다.".formatted(p.getId()), resBody);
     }
 
     @Transactional
@@ -71,5 +71,5 @@ public class ApiV1PostController {
     }
 
     record PostWriteReqBody(@NotBlank String title, @NotBlank String content){}
-    record PostWriteResBody(@NotBlank PostDto postDto, @NotBlank long totalCnt){}
+    record PostWriteResBody(@NotBlank PostDto post, @NotBlank long totalCount){}
 }
