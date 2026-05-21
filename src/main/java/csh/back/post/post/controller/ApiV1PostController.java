@@ -4,12 +4,11 @@ import csh.back.global.rsData.RsData;
 import csh.back.post.post.dto.PostDto;
 import csh.back.post.post.entity.Post;
 import csh.back.post.post.service.PostService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ import java.util.List;
 public class ApiV1PostController {
     private final PostService postService;
 
-    @GetMapping("")
+    @GetMapping
     public List<PostDto> getItems() {
         List<Post> items = postService.findAll();
         return items
@@ -28,8 +27,17 @@ public class ApiV1PostController {
                 .toList();
     }
 
+    @GetMapping("/{id}")
+    public PostDto getItem(
+            @PathVariable int id
+    ) {
+        Post post = postService.findById(id).get();
+
+        return new PostDto(post);
+    }
+
     @Transactional
-    @GetMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public RsData<PostDto> delete(@PathVariable int id) {
         Post post = postService.findById(id).get();
 
@@ -39,4 +47,15 @@ public class ApiV1PostController {
         return new RsData<>("200-1",
                 "%d번 글이 삭제되었습니다.".formatted(post.getId()),new PostDto(post));
     }
+
+    @Transactional
+    @PostMapping("/create")
+    public RsData<PostDto> create(@Valid @RequestBody writeForm form) {
+        System.out.println(form.toString());
+        Post p = postService.write(form.title(), form.content());
+        PostDto dto = new PostDto(p);
+        return new RsData<>("200-1", "성공했어요~~!", dto);
+    }
+
+    record writeForm(@NotBlank String title, @NotBlank String content){}
 }
