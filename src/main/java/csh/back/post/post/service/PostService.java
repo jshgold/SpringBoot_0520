@@ -28,10 +28,6 @@ public class PostService {
         return postRepository.findById(id);
     }
 
-    public Optional<Post> findLatest() {
-        return postRepository.findFirstByOrderByIdDesc();
-    }
-
     public List<Post> findAll() {
         return postRepository.findAll();
     }
@@ -40,8 +36,8 @@ public class PostService {
         post.modify(title, content);
     }
 
-    public void writeComment(Post post, String content) {
-        post.addComment(content);
+    public PostComment writeComment(Post post, String content) {
+        return post.addComment(content);
     }
 
     public boolean deleteComment(Post post, PostComment postComment) {
@@ -52,8 +48,15 @@ public class PostService {
         postComment.modify(content);
     }
 
-
     public void delete(Post post) {
         postRepository.delete(post);
+    }
+
+    public Optional<Post> findLatest() {
+        return postRepository.findFirstByOrderByIdDesc();
+    }
+
+    public void flush() {
+        postRepository.flush();
     }
 }
