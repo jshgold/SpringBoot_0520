@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/posts")
 @RestController
@@ -30,7 +32,7 @@ public class ApiV1PostController {
                 .toList();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public PostDto getItem(
             @PathVariable int id
     ) {
