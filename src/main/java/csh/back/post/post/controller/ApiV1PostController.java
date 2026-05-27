@@ -4,6 +4,8 @@ import csh.back.global.rsData.RsData;
 import csh.back.post.post.dto.PostDto;
 import csh.back.post.post.entity.Post;
 import csh.back.post.post.service.PostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +19,14 @@ import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@Tag(name="PostController", description = "글 컨트롤러")
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/posts")
 @RestController
 public class ApiV1PostController {
     private final PostService postService;
 
+    @Operation(summary = "다건 조회")
     @GetMapping
     public List<PostDto> getItems() {
         List<Post> items = postService.findAll();
@@ -32,6 +36,7 @@ public class ApiV1PostController {
                 .toList();
     }
 
+    @Operation(summary = "단건 조회")
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public PostDto getItem(
             @PathVariable int id
@@ -41,6 +46,7 @@ public class ApiV1PostController {
         return new PostDto(post);
     }
 
+    @Operation(summary = "글 삭제")
     @Transactional
     @DeleteMapping("/{id}")
     public RsData<PostDto> delete(@PathVariable int id) {
@@ -53,6 +59,7 @@ public class ApiV1PostController {
                 "%d번 글이 삭제되었습니다.".formatted(post.getId()),new PostDto(post));
     }
 
+    @Operation(summary = "글 등록")
     @Transactional
     @PostMapping("/create")
     public RsData<PostDto> write(@Valid @RequestBody PostWriteReqBody req) {
@@ -63,6 +70,7 @@ public class ApiV1PostController {
         return new RsData<>("201-1", "%d번 글이 작성되었습니다.".formatted(p.getId()), dto);
     }
 
+    @Operation(summary = "글 수정")
     @Transactional
     @PutMapping("/edit/{id}")
     public RsData<PostDto> edit(@PathVariable int id, @Valid @RequestBody PostWriteReqBody req) {

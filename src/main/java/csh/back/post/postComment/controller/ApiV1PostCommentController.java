@@ -5,6 +5,8 @@ import csh.back.post.post.entity.Post;
 import csh.back.post.post.service.PostService;
 import csh.back.post.postComment.dto.PostCommentDto;
 import csh.back.post.postComment.entity.PostComment;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -14,14 +16,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/v1/posts/{postId}/comments")
+@Tag(name="PostCommentController", description = "댓글 컨트롤러")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/posts/{postId}/comments")
+@RestController
 public class ApiV1PostCommentController {
     private final PostService postService;
 
-    @GetMapping
+    @Operation(summary = "다건 조회")
     @Transactional(readOnly = true)
+    @GetMapping
     public List<PostCommentDto> getItems(
             @PathVariable int postId
     ) {
@@ -34,8 +38,9 @@ public class ApiV1PostCommentController {
                 .toList();
     }
 
-    @GetMapping("/{id}")
+    @Operation(summary = "단건 조회")
     @Transactional(readOnly = true)
+    @GetMapping("/{id}")
     public PostCommentDto getItem(
             @PathVariable int postId,
             @PathVariable int id
@@ -47,8 +52,9 @@ public class ApiV1PostCommentController {
         return dto;
     }
 
-    @DeleteMapping("/{id}")
+    @Operation(summary = "댓글삭제")
     @Transactional
+    @DeleteMapping("/{id}")
     public RsData<Void> delete(
             @PathVariable int postId,
             @PathVariable int id
@@ -65,6 +71,7 @@ public class ApiV1PostCommentController {
     }
 
 
+
     public record PostCommentModifyReqBody(
             @NotBlank
             @Size(min = 2, max = 100)
@@ -72,8 +79,9 @@ public class ApiV1PostCommentController {
     ) {
     }
 
-    @PutMapping("/{id}")
+    @Operation(summary = "댓글수정")
     @Transactional
+    @PutMapping("/{id}")
     public RsData<Void> modify(
             @PathVariable int postId,
             @PathVariable int id,
@@ -98,8 +106,9 @@ public class ApiV1PostCommentController {
     ) {
     }
 
-    @PostMapping
+    @Operation(summary = "댓글등록")
     @Transactional
+    @PostMapping
     public RsData<PostCommentDto> write(
             @PathVariable int postId,
             @Valid @RequestBody PostCommentWriteReqBody reqBody
